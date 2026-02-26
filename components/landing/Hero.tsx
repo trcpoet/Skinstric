@@ -19,27 +19,37 @@ export default function Hero() {
   const controlRightRef = useRef<HTMLDivElement>(null);
   const captionRef = useRef<HTMLParagraphElement>(null);
   const deltaXRef = useRef(0);
+  const line1Ref = useRef<HTMLSpanElement>(null);
+  const line2Ref = useRef<HTMLSpanElement>(null);
+  const deltaXLine1Ref = useRef(0);
+  const deltaXLine2Ref = useRef(0);
 
   // Calculate alignment delta for the H1 animation
   useLayoutEffect(() => {
     const computeDelta = () => {
-      if (!titleRef.current || !controlLeftRef.current) return;
+      if (!titleRef.current || !controlLeftRef.current || !line1Ref.current || !line2Ref.current) return;
       
-      const h1Rect = titleRef.current.getBoundingClientRect();
       // Use the paragraph text (captionRef) as our true left alignment target edge
       const targetRect = captionRef.current ? captionRef.current.getBoundingClientRect() : controlLeftRef.current.getBoundingClientRect();
 
-      const currentX = (gsap.getProperty(titleRef.current, "x") as number) || 0;
+      const line1CurrentX = (gsap.getProperty(line1Ref.current, "x") as number) || 0;
+      const line2CurrentX = (gsap.getProperty(line2Ref.current, "x") as number) || 0;
+      const parentCurrentX = (gsap.getProperty(titleRef.current, "x") as number) || 0;
+
+      const line1Rect = line1Ref.current.getBoundingClientRect();
+      const line2Rect = line2Ref.current.getBoundingClientRect();
+
+      const line1Left = line1Rect.left - line1CurrentX - parentCurrentX;
+      const line2Left = line2Rect.left - line2CurrentX - parentCurrentX;
+
+      const minLeftEdge = Math.min(line1Left, line2Left);
       
-      // Calculate where the text physically starts inside the centered box 
-      // by measuring the width of the text vs the screen
-      const textWidth = titleRef.current.scrollWidth;
-      const boxLeftEdge = h1Rect.left - currentX;
-      const emptySpaceLeft = (h1Rect.width - textWidth) / 2;
-      
-      const trueTextLeftMargin = boxLeftEdge + emptySpaceLeft;
-      
-      deltaXRef.current = targetRect.left - trueTextLeftMargin;
+      // Parent moves the whole block to the target
+      deltaXRef.current = targetRect.left - minLeftEdge;
+
+      // Children move individually to left align their own edges with the minLeftEdge
+      deltaXLine1Ref.current = minLeftEdge - line1Left;
+      deltaXLine2Ref.current = minLeftEdge - line2Left;
     };
 
     computeDelta();
@@ -67,6 +77,15 @@ export default function Hero() {
       ease: "power3.out",
       overwrite: "auto",
     });
+
+    if (line1Ref.current && line2Ref.current) {
+      gsap.to([line1Ref.current, line2Ref.current], {
+        x: (index) => isHovering ? (index === 0 ? deltaXLine1Ref.current : deltaXLine2Ref.current) : 0,
+        duration: 0.8,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    }
 
     // Fade out/in left diamond and discover AI button
     if (decoLeftRef.current && controlLeftRef.current) {
@@ -146,15 +165,14 @@ export default function Hero() {
       <div className="flex flex-col items-center justify-center px-6">
         <h1
           ref={titleRef}
-          className="text-center font-normal leading-[0.99] tracking-[0.05em] text-[#1A1B1C] w-full"
+          className="flex flex-col items-center justify-center font-normal leading-[0.99] tracking-[0.05em] text-[#1A1B1C] w-full"
           style={{
             fontSize: "clamp(36px, 6vw, 96px)",
             lineHeight: "clamp(36px, 6vw, 96px)",
           }}
         >
-          Sophisticated
-          <br />
-          skincare
+          <span ref={line1Ref} className="whitespace-nowrap">Sophisticated</span>
+          <span ref={line2Ref} className="whitespace-nowrap">skincare</span>
         </h1>
       </div>
 
