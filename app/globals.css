@@ -11,6 +11,57 @@
   visibility: hidden;
 }
 
+/* ── Take-test page: rotating diamonds ── */
+@keyframes rotate-diamond {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(405deg);
+  }
+}
+
+.diamond {
+  background-color: transparent;
+  border-style: dashed;
+  border-width: 2px;
+  position: absolute;
+  transform: rotate(45deg);
+}
+
+.diamond-outer {
+  animation: rotate-diamond 100s linear infinite;
+  border-color: #c5c7cb;
+  height: 762px;
+  left: 50%;
+  margin-left: -381px;
+  margin-top: -381px;
+  top: 50%;
+  width: 762px;
+}
+
+.diamond-middle {
+  animation: rotate-diamond 60s linear infinite;
+  border-color: #b5b8bd;
+  height: 630px;
+  left: 50%;
+  margin-left: -315px;
+  margin-top: -315px;
+  top: 50%;
+  width: 630px;
+}
+
+.diamond-inner {
+  animation: rotate-diamond 80s linear infinite;
+  border-color: #a0a4ab;
+  height: 500px;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: -250px;
+  top: 50%;
+  width: 500px;
+}
+
 html,
 body {
   background-color: var(--color-background);

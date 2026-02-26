@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import LandingHeader from "./LandingHeader";
@@ -9,6 +10,7 @@ import HeroSideControl from "./HeroSideControl";
 import HeroCaption from "./HeroCaption";
 
 export default function Hero() {
+  const router = useRouter();
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const headerRef = useRef<HTMLElement>(null);
@@ -189,6 +191,7 @@ export default function Hero() {
           label="TAKE TEST"
           side="right"
           className="pointer-events-auto absolute right-4 top-1/2 -translate-y-1/2"
+          onClick={() => router.push("/take-test")}
           onMouseEnter={() => handleHoverCTA(true)}
           onMouseLeave={() => handleHoverCTA(false)}
         />
