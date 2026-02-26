@@ -8,15 +8,19 @@ interface HeroSideControlProps {
   side: "left" | "right";
   className?: string;
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const HeroSideControl = forwardRef<HTMLDivElement, HeroSideControlProps>(
-  function HeroSideControl({ label, side, className, onClick }, ref) {
+  function HeroSideControl({ label, side, className, onClick, onMouseEnter, onMouseLeave }, ref) {
     return (
       <div
         ref={ref}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         className={cn(
-          "flex items-center gap-7",
+          "flex items-center gap-4",
           side === "right" && "flex-row-reverse",
           className
         )}
@@ -38,7 +42,7 @@ const HeroSideControl = forwardRef<HTMLDivElement, HeroSideControlProps>(
             </svg>
           )}
         </button>
-        <span className="text-lg font-light tracking-tight text-[#1A1B1C]">
+        <span className="text-sm font-bold tracking-wide text-[#1A1B1C]">
           {label}
         </span>
       </div>

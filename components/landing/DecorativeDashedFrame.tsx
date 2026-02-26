@@ -16,9 +16,9 @@ const DecorativeDashedFrame = forwardRef<
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute top-1/2 hidden min-[900px]:block",
-        "h-[480px] w-[480px] -translate-y-1/2 rotate-45",
+        "h-[420px] w-[420px] -translate-y-1/2 rotate-45",
         "border-2 border-dashed border-muted",
-        side === "left" ? "-left-[260px]" : "-right-[260px]",
+        side === "left" ? "-left-[250px]" : "-right-[250px]",
         className
       )}
     />
