@@ -189,6 +189,7 @@ export default function TakeTestIntro() {
 
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
+        console.log("Phase 1 is working");
         console.log("[Skinstric] API success:", data);
       } else {
         throw new Error(`Server responded with ${res.status}`);

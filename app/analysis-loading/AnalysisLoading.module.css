@@ -1,0 +1,170 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #fcfcfc;
+  font-family: "Roobert TRIAL", system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  color: #1a1b1c;
+}
+
+.header {
+  position: absolute;
+  left: 32px;
+  top: 18px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #1a1b1c;
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.6;
+}
+
+.crumbPip {
+  box-sizing: border-box;
+  width: 4px;
+  height: 17px;
+  border: 1px solid #1a1b1c;
+  border-radius: 2px;
+}
+
+.crumbText {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.analysisLabel {
+  position: absolute;
+  left: 32px;
+  top: 86px;
+  z-index: 50;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  z-index: 10;
+}
+
+@keyframes rotate-diamond {
+  from {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(405deg);
+  }
+}
+
+.rhombus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transform-origin: center;
+  background: transparent;
+  border: 2px dashed #a0a4ab;
+  pointer-events: none;
+}
+
+.rhombusOuter {
+  width: 380px;
+  height: 380px;
+  opacity: 0.3;
+  animation: rotate-diamond 100s linear infinite;
+}
+
+.rhombusMid {
+  width: 320px;
+  height: 320px;
+  opacity: 0.5;
+  animation: rotate-diamond 80s linear infinite;
+}
+
+.rhombusInner {
+  width: 260px;
+  height: 260px;
+  opacity: 0.6;
+  animation: rotate-diamond 60s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rhombusOuter,
+  .rhombusMid,
+  .rhombusInner {
+    animation: none;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+}
+
+.loadingText {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #1a1b1c;
+}
+
+.errorBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.errorText {
+  font-size: 14px;
+  color: #b91c1c;
+}
+
+.tryAgain {
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  background: #1a1b1c;
+  color: #fcfcfc;
+  border: 1px solid #1a1b1c;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.tryAgain:hover {
+  background: transparent;
+  color: #1a1b1c;
+}

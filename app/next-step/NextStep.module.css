@@ -118,6 +118,10 @@
   height: 460px;
 }
 
+.moduleClickable {
+  cursor: pointer;
+}
+
 .rhombus {
   position: absolute;
   left: 50%;
@@ -230,8 +234,8 @@
 
 .connectorRight svg {
   position: absolute;
-  top: 70px;
-  left: 0;
+  top: 90px;
+  left: 5px;
   transform: rotate(180deg);
 }
 

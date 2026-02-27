@@ -1,15 +1,19 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+import { postPhaseOne } from "@/lib/api";
+import CameraCaptureModal from "@/components/next-step/CameraCaptureModal";
 import styles from "./NextStep.module.css";
+
+type UserData = { name: string; location: string };
 
 function ConnectorSvg() {
   return (
-    <svg width="66" height="59" viewBox="0 0 66 59" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="66" height="51" viewBox="0 0 66 59" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M1 58L63 3" stroke="#1A1B1C" strokeWidth="1" />
       <circle cx="63" cy="3" r="2.5" stroke="#1A1B1C" strokeWidth="1" />
     </svg>
@@ -19,6 +23,9 @@ function ConnectorSvg() {
 export default function NextStepPage() {
   const router = useRouter();
   const prefersReducedMotion = usePrefersReducedMotion();
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [phase1Error, setPhase1Error] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const headerRef = useRef<HTMLDivElement>(null);
   const analysisRef = useRef<HTMLDivElement>(null);
@@ -61,6 +68,62 @@ export default function NextStepPage() {
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
+  const handleImageReady = useCallback(
+    async (imageBase64: string) => {
+      setPhase1Error("");
+
+      let userData: UserData | null = null;
+      try {
+        const stored = localStorage.getItem("skinstric:user");
+        userData = stored ? (JSON.parse(stored) as UserData) : null;
+      } catch {
+        userData = null;
+      }
+
+      if (!userData?.name || !userData?.location) {
+        setPhase1Error("Please complete Intro (name & location) first.");
+        router.push("/take-test");
+        return;
+      }
+
+      // Save image to localStorage
+      try {
+        localStorage.setItem("skinstric:image", imageBase64);
+      } catch {
+        /* continue */
+      }
+
+      // Call Phase 1 API (don't block flow on failure)
+      try {
+        await postPhaseOne({ name: userData.name, location: userData.location });
+      } catch {
+        setPhase1Error("Could not save to server. Continuing.");
+        // Don't block flow
+      }
+
+      router.push("/analysis-loading");
+    },
+    [router]
+  );
+
+  const handleGallerySelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file || !file.type.startsWith("image/")) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        const base64 =
+          dataUrl.includes(",") ? dataUrl.split(",")[1]?.trim() ?? "" : dataUrl;
+        if (base64) handleImageReady(base64);
+      };
+      reader.readAsDataURL(file);
+      e.target.value = "";
+    },
+    [handleImageReady]
+  );
+
   return (
     <section className={styles.page}>
       {/* Header */}
@@ -83,10 +146,33 @@ export default function NextStepPage() {
         To Start Analysis
       </div>
 
+      {phase1Error && (
+        <p className="absolute left-8 top-[120px] z-[100] text-sm text-amber-700">
+          {phase1Error}
+        </p>
+      )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleGallerySelect}
+        aria-label="Select image from gallery"
+      />
+
       {/* Modules */}
       <div className={styles.modulesRow}>
         {/* Left: Camera */}
-        <div ref={leftModuleRef} className={`${styles.module} ${styles.moduleLeft}`}>
+        <div
+          ref={leftModuleRef}
+          role="button"
+          tabIndex={0}
+          className={`${styles.module} ${styles.moduleLeft} ${styles.moduleClickable}`}
+          onClick={() => setCameraOpen(true)}
+          onKeyDown={(e) => e.key === "Enter" && setCameraOpen(true)}
+          aria-label="Open camera to capture photo"
+        >
           <div className={`${styles.rhombus} ${styles.rhombusOuter}`} aria-hidden="true" />
           <div className={`${styles.rhombus} ${styles.rhombusMid}`} aria-hidden="true" />
           <div className={`${styles.rhombus} ${styles.rhombusInner}`} aria-hidden="true" />
@@ -104,12 +190,20 @@ export default function NextStepPage() {
             <ConnectorSvg />
           </div>
           <div className={styles.captionLeft}>
-            <div className={styles.captionText}>Allow A.I. to Scan Your Face</div>
+            <div className={styles.captionText}>Allow A.I.<br />to Scan Your Face</div>
           </div>
         </div>
 
         {/* Right: Gallery */}
-        <div ref={rightModuleRef} className={`${styles.module} ${styles.moduleRight}`}>
+        <div
+          ref={rightModuleRef}
+          role="button"
+          tabIndex={0}
+          className={`${styles.module} ${styles.moduleRight} ${styles.moduleClickable}`}
+          onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => e.key === "Enter" && fileInputRef.current?.click()}
+          aria-label="Open gallery to select image"
+        >
           <div className={`${styles.rhombus} ${styles.rhombusOuter}`} aria-hidden="true" />
           <div className={`${styles.rhombus} ${styles.rhombusMid}`} aria-hidden="true" />
           <div className={`${styles.rhombus} ${styles.rhombusInner}`} aria-hidden="true" />
@@ -127,12 +221,19 @@ export default function NextStepPage() {
             <ConnectorSvg />
           </div>
           <div className={styles.captionRight}>
-            <div className={styles.captionText}>Allow A.I. Access Gallery</div>
+            <div className={styles.captionText}>Allow A.I <br />to Access Gallery</div>
           </div>
         </div>
       </div>
 
-      {/* Back */}
+      <CameraCaptureModal
+        isOpen={cameraOpen}
+        onClose={() => setCameraOpen(false)}
+        onCapture={handleImageReady}
+        onError={() => {}}
+      />
+
+      {/* Back */}  
       <div ref={backRef} className={styles.back} onClick={() => router.push("/take-test")}>
         <svg
           className={styles.backIcon}
