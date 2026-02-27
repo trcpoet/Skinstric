@@ -93,13 +93,13 @@
 .modulesRow {
   position: relative;
   margin: 0 auto;
-  padding-top: 220px;
+  padding-top: 200px;
   padding-bottom: 120px;
   max-width: 1600px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 160px;
+  justify-content: space-around;
+  gap: 300px;
   z-index: 10;
 }
 
@@ -109,13 +109,13 @@
 }
 
 .moduleLeft {
-  width: 520px;
-  height: 482px;
+  width: 480px;
+  height: 460px;
 }
 
 .moduleRight {
-  width: 488px;
-  height: 482px;
+  width: 448px;
+  height: 460px;
 }
 
 .rhombus {
@@ -125,25 +125,26 @@
   transform: translate(-50%, -50%) rotate(45deg);
   transform-origin: center;
   background: transparent;
-  border: 2px dashed #a0a4ab;
+  border: 2px dotted #a0a4ab;
   transition: transform 300ms ease;
+  opacity: 0.5;
 }
 
 .rhombusOuter {
-  width: 420px;
-  height: 420px;
+  width: 380px;
+  height: 380px;
   opacity: 0.3;
 }
 
 .rhombusMid {
-  width: 386px;
-  height: 386px;
+  width: 350px;
+  height: 350px;
   opacity: 0.6;
 }
 
 .rhombusInner {
-  width: 352px;
-  height: 352px;
+  width: 320px;
+  height: 320px;
   opacity: 1;
 }
 
@@ -151,8 +152,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 260px;
-  height: 260px;
+  width: 220px;
+  height: 220px;
   padding: 5%;
   box-sizing: border-box;
   border-radius: 50%;
@@ -181,44 +182,72 @@
 }
 
 .captionText {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #1a1b1c;
 }
 
 .captionLeft {
   position: absolute;
-  left: 353px;
-  top: 126px;
+  left: 310px;
+  top: 120px;
   width: 167px;
 }
 
 .connectorLeft {
   position: absolute;
-  left: 281px;
-  top: 143px;
-  width: 66px;
-  height: 59px;
+  left: 296px;
+  top: 140px;
+  width: 56px;
+  height: 46px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .captionRight {
   position: absolute;
-  left: 0px;
-  top: 326px;
+  left: 20px;
+  top: 320px;
   width: 136px;
   text-align: right;
 }
 
+/* Right connector: line from gallery icon (bottom-left) to caption (top-right) */
 .connectorRight {
   position: absolute;
-  left: 144px;
-  top: 281px;
-  width: 66px;
-  height: 59px;
+  left: 118px;
+  top: 200px;
+  width: 51px;
+  height: 38px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.connectorRight svg {
+  position: absolute;
+  top: 70px;
+  left: 0;
   transform: rotate(180deg);
-  transform-origin: center;
+}
+
+/* Zoom captions + connectors together with icons on hover */
+.captionLeft,
+.captionRight,
+.connectorLeft,
+.connectorRight {
+  transition: transform 250ms ease;
+}
+
+.module:hover .captionLeft,
+.module:hover .captionRight,
+.module:hover .connectorLeft,
+.module:hover .connectorRight {
+  transform: scale(1.05);
 }
 
 .back {

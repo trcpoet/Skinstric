@@ -180,17 +180,21 @@ export default function TakeTestIntro() {
     // Send to API
     setIsSubmitting(true);
     try {
+      console.log("[Skinstric] POST", API_URL, userData);
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
 
-      if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        console.log("[Skinstric] API success:", data);
+      } else {
         throw new Error(`Server responded with ${res.status}`);
       }
     } catch (err) {
-      console.error("API error:", err);
+      console.error("[Skinstric] API error:", err);
       setError("Something went wrong. Please try again.");
       setIsSubmitting(false);
       return;
