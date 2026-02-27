@@ -4,9 +4,16 @@
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #fcfcfc;
+  background-color: #f5f5f5;
   font-family: "Roobert TRIAL", system-ui, sans-serif;
   color: #1a1b1c;
+}
+
+@media (max-width: 768px) {
+  .demographics-page {
+    overflow-y: auto;
+    padding-bottom: 40px;
+  }
 }
 
 .top-left-text {
@@ -44,6 +51,23 @@
   top: 86px;
 }
 
+@media (max-width: 1024px) {
+  .demographics-content {
+    left: 24px;
+    top: 72px;
+  }
+}
+
+@media (max-width: 768px) {
+  .demographics-content {
+    left: auto;
+    padding: 0 16px;
+    position: relative;
+    top: 80px;
+    width: 100%;
+  }
+}
+
 .ai-analysis-title {
   color: #1a1b1c;
   font-family: "Roobert TRIAL", sans-serif;
@@ -53,6 +77,18 @@
   line-height: 24px;
   margin-bottom: 4px;
   text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .ai-analysis-title {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-analysis-title {
+    font-size: 12px;
+  }
 }
 
 .demographics-subtitle,
@@ -69,10 +105,44 @@
   line-height: 80px;
 }
 
+@media (max-width: 1200px) {
+  .demographics-subtitle {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .demographics-subtitle {
+    font-size: 36px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .demographics-subtitle {
+    font-size: 28px;
+    line-height: 34px;
+    margin-bottom: 20px;
+  }
+}
+
 .predicted-text {
   font-size: 16px;
   line-height: 24px;
   margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .predicted-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .predicted-text {
+    font-size: 12px;
+  }
 }
 
 .demographics-boxes-container {
@@ -86,10 +156,28 @@
   transform: translateX(-50%);
 }
 
+@media (max-width: 768px) {
+  .demographics-boxes-container {
+    flex-direction: column;
+    gap: 20px;
+    left: auto;
+    padding: 0 16px;
+    position: relative;
+    top: auto;
+    transform: none;
+  }
+}
+
 .demographics-boxes {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .demographics-boxes {
+    display: none;
+  }
 }
 
 .demographics-box {
@@ -187,6 +275,14 @@
   width: 720px;
 }
 
+@media (max-width: 768px) {
+  .large-demographics-box {
+    height: auto;
+    min-height: 200px;
+    width: 100%;
+  }
+}
+
 .selected-race-display {
   color: #1a1b1c;
   font-family: "Roobert TRIAL", sans-serif;
@@ -220,6 +316,16 @@
   right: 40px;
   top: 50%;
   transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+  .circular-graph {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    margin-top: 20px;
+  }
 }
 
 .circle-progress {
@@ -259,6 +365,13 @@
   padding: 20px;
   position: relative;
   width: 340px;
+}
+
+@media (max-width: 768px) {
+  .right-demographics-box {
+    height: auto;
+    width: 100%;
+  }
 }
 
 .box-header {
@@ -339,12 +452,36 @@
   white-space: nowrap;
 }
 
+@media (max-width: 768px) {
+  .instruction-text {
+    left: auto;
+    margin: 30px auto;
+    position: relative;
+    top: auto;
+    transform: none;
+    width: 100%;
+  }
+}
+
 .action-buttons {
   bottom: 40px;
   display: flex;
   gap: 16px;
   position: absolute;
   right: 40px;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    bottom: auto;
+    flex-direction: column;
+    left: auto;
+    margin: 30px 0 40px;
+    padding: 0 16px;
+    position: relative;
+    right: auto;
+    width: 100%;
+  }
 }
 
 .reset-button {
@@ -384,6 +521,21 @@
   position: fixed;
   transition: transform 0.3s ease;
   z-index: 100;
+}
+
+@media (max-width: 768px) {
+  .back-button-icon {
+    left: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button-icon svg,
+  .action-buttons .confirm-button,
+  .action-buttons .reset-button {
+    min-height: 32px;
+  }
 }
 
 /* No-data fallback */

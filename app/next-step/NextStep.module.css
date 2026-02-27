@@ -240,6 +240,7 @@
   top: 90px;
   left: 5px;
   transform: rotate(180deg);
+  transform: translate(-10px, 10px) ;
 }
 
 /* Zoom captions + connectors together with icons on hover */
@@ -344,10 +345,18 @@
   .captionRight {
     top: 220px;
   }
+}
 
-  .connectorLeft,
-  .connectorRight {
-    transform: scale(0.8);
-    transform-origin: left top;
+@media (max-width: 680px) {
+  .connectorLeft svg,
+  .connectorRight svg {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .connectorLeft svg,
+  .connectorRight svg {
+    display: none;
   }
 }
