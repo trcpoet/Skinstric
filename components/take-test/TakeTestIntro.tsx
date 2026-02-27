@@ -296,7 +296,7 @@ export default function TakeTestIntro() {
           disabled={isSubmitting}
           className={cn(
             "w-[800px] max-w-[90vw] border-none bg-transparent outline-none",
-            "text-center text-[64px] font-light leading-none text-[#1A1B1C]",
+            "text-center text-[32px] md:text-[64px] font-light leading-none text-[#1A1B1C]",
             "pb-2",
             "placeholder:text-[#A0A4AB]",
             "cursor-text",
