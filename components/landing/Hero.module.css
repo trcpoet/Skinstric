@@ -1,0 +1,171 @@
+/* ── Landing Hero: mobile & tablet ── */
+
+/* Mobile diamond frames (shown below 1024px; desktop uses DecorativeDashedFrame) */
+.triangleMobile,
+.triangleMobileOuter {
+  display: none;
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .triangleMobile,
+  .triangleMobileOuter {
+    display: block !important;
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%) rotate(45deg) !important;
+    border: 2px dashed #a0a4ab;
+    background: transparent;
+    z-index: 0;
+  }
+
+  .triangleMobileOuter {
+    border-color: #d0d3d9;
+    width: 280px;
+    height: 280px;
+  }
+
+  .triangleMobile {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .triangleMobile,
+  .triangleMobileOuter {
+    top: 43%;
+  }
+
+  .triangleMobileOuter {
+    width: 450px;
+    height: 450px;
+  }
+
+  .triangleMobile {
+    width: 180px;
+    height: 180px;
+    visibility: hidden;
+  }
+}
+
+/* Center content column on mobile/tablet */
+.heroCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 680px;
+}
+
+@media (max-width: 1024px) {
+  .heroCenter {
+    flex: 1;
+    justify-content: center;
+    max-width: none;
+  }
+
+  .heroTitleWrap {
+    order: 1;
+    margin-bottom: 50px;
+    margin-top: 125px;
+  }
+
+  .heroCtaWrap {
+    order: 2;
+    margin-top: 24px;
+  }
+
+  .heroCaptionWrap {
+    order: 3;
+    margin-top: 150px;
+  }
+}
+
+/* Mobile Enter Experience button */
+.mobileEnterExperience {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  order: 2;
+  margin-top: 100px;
+  transform: translate(0px, 70px);
+}
+
+@media (max-width: 1024px) {
+  .mobileEnterExperience {
+    display: flex !important;
+  }
+}
+
+.mobileEnterText {
+  font-family: "Roobert TRIAL", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background-color: #1a1b1c;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  transition: transform 0.2s ease;
+}
+
+.mobileEnterText:hover {
+  transform: scale(1.02);
+}
+
+.mobileEnterText:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .mobileEnterText {
+    margin-bottom: 0;
+  }
+}
+
+/* Bottom caption: desktop absolute, mobile/tablet static and centered */
+.heroCaption {
+  /* desktop defaults from component */
+}
+
+@media (max-width: 1024px) {
+  .heroCaption {
+    position: static !important;
+    left: auto !important;
+    bottom: auto !important;
+    text-align: center;
+    margin: 4px auto 40px;
+    max-width: 350px;
+    width: 90%;
+    height: auto;
+    color: #a0a4ab;
+    font-size: 12px;
+    line-height: 18px;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroCaption {
+    margin: 120px auto 40px;
+    max-width: 320px;
+    width: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroCaption {
+    margin: 50px auto 20px;
+    max-width: 300px;
+    width: 90%;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 17px;
+  }
+}

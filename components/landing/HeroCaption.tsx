@@ -11,7 +11,7 @@ const HeroCaption = forwardRef<HTMLParagraphElement, HeroCaptionProps>(
       <p
         ref={ref}
         className={cn(
-          "absolute bottom-8 left-15 max-w-[316px]",
+          "absolute bottom-8 left-8 max-w-[316px] text-left",
           "text-sm font-normal uppercase leading-6 tracking-normal text-[#1A1B1C]",
           className
         )}

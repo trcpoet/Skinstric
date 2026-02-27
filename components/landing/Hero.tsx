@@ -2,12 +2,14 @@
 
 import { useRef, useLayoutEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import gsap from "gsap";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import LandingHeader from "./LandingHeader";
 import DecorativeDashedFrame from "./DecorativeDashedFrame";
 import HeroSideControl from "./HeroSideControl";
 import HeroCaption from "./HeroCaption";
+import styles from "./Hero.module.css";
 
 export default function Hero() {
   const router = useRouter();
@@ -104,8 +106,13 @@ export default function Hero() {
   useLayoutEffect(() => {
     if (prefersReducedMotion) return;
 
+    const isMobile = window.matchMedia("(max-width: 480px)").matches;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      const initialTitleY = isMobile ? 110 : 40;
+      const finalTitleY = isMobile ? 70 : 0;
 
       // Set initial states
       gsap.set(
@@ -122,7 +129,7 @@ export default function Hero() {
       );
 
       gsap.set(headerRef.current, { y: -20 });
-      gsap.set(titleRef.current, { y: 40 });
+      gsap.set(titleRef.current, { y: initialTitleY });
       gsap.set(controlLeftRef.current, { x: -30 });
       gsap.set(controlRightRef.current, { x: 30 });
       gsap.set(captionRef.current, { y: 20 });
@@ -136,7 +143,7 @@ export default function Hero() {
         )
         .to(
           titleRef.current,
-          { autoAlpha: 1, y: 0, duration: 0.7 },
+          { autoAlpha: 1, y: finalTitleY, duration: 0.7 },
           "-=0.4"
         )
         .to(
@@ -155,30 +162,49 @@ export default function Hero() {
   }, [prefersReducedMotion]);
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#FCFCFC]">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#FCFCFC]">
       {/* Header */}
       <LandingHeader ref={headerRef} />
 
-      {/* Decorative dashed frames (xl+ only) */}
+      {/* Desktop decorative dashed frames (hidden on mobile/tablet) */}
       <DecorativeDashedFrame ref={decoLeftRef} side="left" />
       <DecorativeDashedFrame ref={decoRightRef} side="right" />
 
-      {/* Center content */}
-      <div className="flex flex-col items-center justify-center px-6">
-        <h1
-          ref={titleRef}
-          className="flex flex-col items-center justify-center font-normal leading-[0.99] tracking-[0.05em] text-[#1A1B1C] w-full"
-          style={{
-            fontSize: "clamp(36px, 6vw, 96px)",
-            lineHeight: "clamp(36px, 6vw, 96px)",
-          }}
+      {/* Mobile/tablet centered diamonds (hidden on desktop) */}
+      <div className={styles.triangleMobileOuter} aria-hidden="true" />
+      <div className={styles.triangleMobile} aria-hidden="true" />
+
+      {/* Center content: title, mobile CTA, caption */}
+      <div className={`${styles.heroCenter} px-6`}>
+        <div className={styles.heroTitleWrap}>
+          <h1
+            ref={titleRef}
+            className="flex flex-col items-center justify-center font-semibold leading-[0.99] tracking-[0.05em] text-[#1A1B1C] w-full"
+            style={{
+              fontSize: "clamp(47px, 6vw, 98px)",
+              lineHeight: "clamp(40px, 6vw, 96px)",
+            }}
+          >
+            <span ref={line1Ref} className="whitespace-nowrap">Sophisticated</span>
+            <span ref={line2Ref} className="whitespace-nowrap">skincare</span>
+          </h1>
+        </div>
+
+        {/* Mobile/tablet only: Enter Experience CTA */}
+        <Link
+          href="/take-test"
+          className={styles.mobileEnterExperience}
+          aria-label="Enter experience"
         >
-          <span ref={line1Ref} className="whitespace-nowrap">Sophisticated</span>
-          <span ref={line2Ref} className="whitespace-nowrap">skincare</span>
-        </h1>
+          <span className={styles.mobileEnterText}>Enter Experience</span>
+        </Link>
+
+        <div className={styles.heroCaptionWrap}>
+          <HeroCaption ref={captionRef} className={styles.heroCaption} />
+        </div>
       </div>
 
-      {/* Side controls - positioned at hero midline on desktop */}
+      {/* Side controls - desktop only, positioned at hero midline */}
       <div className="pointer-events-none absolute inset-0 hidden min-[900px]:block">
         <HeroSideControl
           ref={controlLeftRef}
@@ -196,10 +222,6 @@ export default function Hero() {
           onMouseLeave={() => handleHoverCTA(false)}
         />
       </div>
-
-
-      {/* Bottom-left caption */}
-      <HeroCaption ref={captionRef} />
     </section>
   );
 }

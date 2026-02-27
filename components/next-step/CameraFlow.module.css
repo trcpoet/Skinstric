@@ -1,0 +1,322 @@
+/* ── Camera Flow: Step 1 – Permission prompt ── */
+.cameraOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 27, 28, 0.4);
+}
+
+.cameraPermissionModal {
+  position: relative;
+  max-width: 400px;
+  width: 90vw;
+  padding: 32px;
+  background: #1a1b1c;
+  border: 1px solid #3f4041;
+}
+
+.cameraPermissionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.cameraPermissionTitle {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fcfcfc;
+  text-align: center;
+}
+
+.cameraPermissionActions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.cameraPermissionBtn {
+  flex: 1;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease;
+  border: 1px solid #c1c2c3;
+}
+
+.cameraPermissionBtnDeny {
+  background: transparent;
+  color: #fcfcfc;
+  border-color: #c1c2c3;
+}
+
+.cameraPermissionBtnDeny:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cameraPermissionBtnAllow {
+  background: #fcfcfc;
+  color: #1a1b1c;
+  border-color: #fcfcfc;
+}
+
+.cameraPermissionBtnAllow:hover {
+  background: #e8e8e9;
+  border-color: #e8e8e9;
+}
+
+/* ── Camera Flow: Step 2 – Loading / Preparing ── */
+.cameraLoadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fcfcfc;
+}
+
+.cameraLoadingCenter {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.cameraLoadingIconWrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes rotateDiamond {
+  from {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(405deg);
+  }
+}
+
+.cameraLoadingDiamond {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: transparent;
+  border: 2px dashed #c1c2c3;
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0.6;
+}
+
+.cameraLoadingDiamondOuter {
+  width: 320px;
+  height: 320px;
+  animation: rotateDiamond 100s linear infinite;
+  opacity: 0.35;
+}
+
+.cameraLoadingDiamondMiddle {
+  width: 260px;
+  height: 260px;
+  animation: rotateDiamond 60s linear infinite;
+  opacity: 0.5;
+}
+
+.cameraLoadingDiamondInner {
+  width: 200px;
+  height: 200px;
+  animation: rotateDiamond 80s linear infinite;
+  opacity: 0.65;
+}
+
+.cameraLoadingIcon {
+  position: relative;
+  z-index: 2;
+  width: 136px;
+  height: 136px;
+  object-fit: contain;
+}
+
+.cameraLoadingText {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #1a1b1c;
+}
+
+.cameraLoadingHelper {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.cameraHelperText {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #1a1b1c;
+  opacity: 0.85;
+}
+
+.cameraHelperTextMain {
+  margin-bottom: 8px;
+}
+
+.cameraHelperItems {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cameraHelperItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cameraHelperDiamond {
+  width: 4px;
+  height: 4px;
+  background: #1a1b1c;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── Camera Flow: Step 3 – Full-screen view ── */
+.cameraFullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  overflow: hidden;
+}
+
+.cameraVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cameraOverlayUi {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cameraOverlayUi::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(252, 252, 252, 0.2) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+}
+
+.cameraOverlayUi > * {
+  pointer-events: auto;
+}
+
+.cameraBackButton {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+  color: #1a1b1c;
+}
+
+.cameraBackLabel {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.cameraHelperBottom {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.cameraHelperBottom .cameraHelperText {
+  color: #1a1b1c;
+  text-shadow: 0 1px 2px rgba(252, 252, 252, 0.6);
+}
+
+.cameraCaptureCta {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cameraCaptureLabel {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #1a1b1c;
+}
+
+.cameraCaptureBtn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #1a1b1c;
+  background: rgba(252, 252, 252, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms ease, background 200ms ease;
+}
+
+.cameraCaptureBtn:hover {
+  background: rgba(252, 252, 252, 0.3);
+  transform: scale(1.05);
+}
+
+.cameraCaptureBtn:active {
+  transform: scale(0.98);
+}
