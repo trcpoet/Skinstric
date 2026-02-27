@@ -22,6 +22,7 @@ export default function TakeTestIntro() {
   const enterCodeRef = useRef<HTMLButtonElement>(null);
   const clickToTypeRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const proceedButtonRef = useRef<HTMLDivElement>(null);
   const backButtonRef = useRef<HTMLDivElement>(null);
   const diamondOuterRef = useRef<HTMLDivElement>(null);
   const diamondMiddleRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,7 @@ export default function TakeTestIntro() {
           enterCodeRef.current,
           clickToTypeRef.current,
           inputRef.current,
+          proceedButtonRef.current,
           backButtonRef.current,
           diamondOuterRef.current,
           diamondMiddleRef.current,
@@ -60,6 +62,7 @@ export default function TakeTestIntro() {
       gsap.set(analysisTextRef.current, { y: 20 });
       gsap.set(clickToTypeRef.current, { y: 15 });
       gsap.set(inputRef.current, { y: 25 });
+      gsap.set(proceedButtonRef.current, { y: 10 });
       gsap.set(backButtonRef.current, { x: -20 });
 
       tl.to(headerRef.current, { autoAlpha: 1, y: 0, duration: 0.6 })
@@ -89,6 +92,11 @@ export default function TakeTestIntro() {
           "-=0.3"
         )
         .to(
+          proceedButtonRef.current,
+          { autoAlpha: 1, y: 0, duration: 0.5 },
+          "-=0.2"
+        )
+        .to(
           backButtonRef.current,
           { autoAlpha: 1, x: 0, duration: 0.5 },
           "-=0.3"
@@ -112,7 +120,7 @@ export default function TakeTestIntro() {
           // Animate new step in after state update
           requestAnimationFrame(() => {
             gsap.fromTo(
-              [clickToTypeRef.current, inputRef.current],
+              [clickToTypeRef.current, inputRef.current, proceedButtonRef.current],
               { autoAlpha: 0, y: 15 },
               { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }
             );
@@ -122,7 +130,7 @@ export default function TakeTestIntro() {
         },
       });
 
-      tl.to([clickToTypeRef.current, inputRef.current], {
+      tl.to([clickToTypeRef.current, inputRef.current, proceedButtonRef.current], {
         autoAlpha: 0,
         y: -15,
         duration: 0.3,
@@ -319,9 +327,51 @@ export default function TakeTestIntro() {
         {/* Submit hint */}
         {step === "location" && !error && (
           <p className="mt-4 text-xs uppercase tracking-wide text-[#A0A4AB]">
-            Press Enter to submit
+            Press Enter or tap Proceed to submit
           </p>
         )}
+      </div>
+
+      {/* ── Proceed button (bottom right, diamond style) ── */}
+      <div
+        ref={proceedButtonRef}
+        role="button"
+        tabIndex={0}
+        onClick={() => !isSubmitting && handleSubmit()}
+        onKeyDown={(e) => e.key === "Enter" && !isSubmitting && handleSubmit()}
+        aria-label="Proceed"
+        className={cn(
+          "fixed bottom-8 right-8 z-[100] flex cursor-pointer items-center gap-2 group",
+          isSubmitting && "pointer-events-none opacity-50"
+        )}
+      >
+        <span className="text-sm font-bold uppercase tracking-wide text-[#1A1B1C] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1">
+          Proceed
+        </span>
+        <button
+          type="button"
+          className="relative flex items-center justify-center outline-none transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[0.8]"
+          aria-hidden
+        >
+          <svg
+            width="44"
+            height="44"
+            viewBox="0 0 44 44"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z"
+              stroke="#1A1B1C"
+              className="transition-colors duration-500 ease-out group-hover:fill-[#1A1B1C]"
+            />
+            <path
+              d="M28.1426 22L18.714 27.4436V16.5564L28.1426 22Z"
+              fill="#1A1B1C"
+              className="transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:fill-white group-hover:translate-x-1"
+            />
+          </svg>
+        </button>
       </div>
 
       {/* ── Back button ── */}
