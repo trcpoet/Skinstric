@@ -372,14 +372,27 @@ export default function TakeTestIntro() {
         ref={proceedButtonRef}
         role="button"
         tabIndex={0}
-        onClick={() => !isSubmitting && phaseOneStatus === "done" && router.push("/next-step")}
-        onKeyDown={(e) =>
-          e.key === "Enter" && !isSubmitting && phaseOneStatus === "done" && router.push("/next-step")
-        }
+        onClick={() => {
+          if (isSubmitting) return;
+          if (phaseOneStatus === "done") {
+            router.push("/next-step");
+          } else {
+            handleSubmit();
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key !== "Enter") return;
+          if (isSubmitting) return;
+          if (phaseOneStatus === "done") {
+            router.push("/next-step");
+          } else {
+            handleSubmit();
+          }
+        }}
         aria-label="Proceed"
         className={cn(
           "fixed bottom-8 right-8 z-[100] flex cursor-pointer items-center gap-2 group",
-          (phaseOneStatus !== "done" || isSubmitting) && "pointer-events-none opacity-0"
+          phaseOneStatus === "processing" && "pointer-events-none opacity-50"
         )}
       >
         <span className="text-sm font-bold uppercase tracking-wide text-[#1A1B1C] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1">

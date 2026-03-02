@@ -189,6 +189,10 @@ export default function DemographicsPage() {
         <span className="intro-text">[ Analysis ]</span>
       </div>
 
+      <button type="button" className="enter-code-btn" aria-label="Enter code">
+        Enter Code
+      </button>
+
       <div className="demographics-content">
         <div className="ai-analysis-title">A.I. ANALYSIS</div>
         <div className="demographics-subtitle">DEMOGRAPHICS</div>
