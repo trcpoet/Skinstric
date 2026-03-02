@@ -48,6 +48,11 @@
     height: 180px;
     visibility: hidden;
   }
+
+  .heroCenter {
+    transform: translate(0px, 70px);
+
+  }
 }
 
 /* Center content column on mobile/tablet */
@@ -131,6 +136,7 @@
 
 /* Bottom caption: desktop absolute, mobile/tablet static and centered */
 .heroCaption {
+  
   /* desktop defaults from component */
 }
 

@@ -77,16 +77,16 @@ export default function Hero() {
     // Animate H1 to target x position
     gsap.to(titleRef.current, {
       x: isHovering ? deltaXRef.current : 0,
-      duration: 0.8,
-      ease: "power3.out",
+      duration: 1.2,
+      ease: "power2.out",
       overwrite: "auto",
     });
 
     if (line1Ref.current && line2Ref.current) {
       gsap.to([line1Ref.current, line2Ref.current], {
         x: (index) => isHovering ? (index === 0 ? deltaXLine1Ref.current : deltaXLine2Ref.current) : 0,
-        duration: 0.8,
-        ease: "power3.out",
+        duration: 1.2,
+        ease: "power2.out",
         overwrite: "auto",
       });
     }
