@@ -139,6 +139,51 @@
   color: #1a1b1c;
 }
 
+.successBlock {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  min-width: 320px;
+  max-width: 420px;
+  border-radius: 10px;
+  background-color: #111827;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
+.successTitle {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  color: #f9fafb;
+}
+
+.successButton {
+  margin-left: auto;
+  padding: 6px 18px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: #10b981;
+  color: #111827;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 160ms ease;
+}
+
+.successButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(16, 185, 129, 0.45);
+}
+
 .errorBlock {
   display: flex;
   flex-direction: column;

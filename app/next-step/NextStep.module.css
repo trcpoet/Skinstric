@@ -122,6 +122,15 @@
   cursor: pointer;
 }
 
+@keyframes nextstep-rotate-diamond {
+  from {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(405deg);
+  }
+}
+
 .rhombus {
   position: absolute;
   left: 50%;
@@ -138,18 +147,21 @@
   width: 380px;
   height: 380px;
   opacity: 0.3;
+  animation: nextstep-rotate-diamond 100s linear infinite;
 }
 
 .rhombusMid {
   width: 350px;
   height: 350px;
   opacity: 0.6;
+  animation: nextstep-rotate-diamond 80s linear infinite;
 }
 
 .rhombusInner {
   width: 320px;
   height: 320px;
   opacity: 1;
+  animation: nextstep-rotate-diamond 60s linear infinite;
 }
 
 .icon {

@@ -34,6 +34,7 @@ export default function TakeTestIntro() {
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [phaseOneStatus, setPhaseOneStatus] = useState<"idle" | "processing" | "done">("idle");
 
   /* ── GSAP entrance animation ── */
   useLayoutEffect(() => {
@@ -185,8 +186,9 @@ export default function TakeTestIntro() {
       // localStorage might be unavailable — continue anyway
     }
 
-    // Send to API
+    // Send to API – stay on this page behind a gate
     setIsSubmitting(true);
+    setPhaseOneStatus("processing");
     try {
       console.log("[Skinstric] POST", API_URL, userData);
       const res = await fetch(API_URL, {
@@ -199,20 +201,20 @@ export default function TakeTestIntro() {
       if (res.ok) {
         console.log("Phase 1 is working");
         console.log("[Skinstric] API success:", data);
+        setPhaseOneStatus("done");
       } else {
         throw new Error(`Server responded with ${res.status}`);
       }
     } catch (err) {
       console.error("[Skinstric] API error:", err);
       setError("Something went wrong. Please try again.");
+      setPhaseOneStatus("idle");
       setIsSubmitting(false);
       return;
     }
 
     setIsSubmitting(false);
-
-    router.push("/next-step");
-  }, [step, name, location, animateStepChange, router]);
+  }, [step, name, location, animateStepChange]);
 
   /* ── Key handler ── */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -276,73 +278,108 @@ export default function TakeTestIntro() {
       <div ref={diamondMiddleRef} className="diamond diamond-middle" aria-hidden="true" />
       <div ref={diamondInnerRef} className="diamond diamond-inner" aria-hidden="true" />
 
-      {/* ── Center input area ── */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-        {/* CLICK TO TYPE helper */}
-        <div
-          ref={clickToTypeRef}
-          className="mb-2 text-sm font-normal uppercase tracking-normal text-[#1A1B1C] opacity-40"
-        >
-          {helperText}
-        </div>
+      {/* ── Center content: input or phase-one gate ── */}
+      {phaseOneStatus === "idle" ? (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+          {/* CLICK TO TYPE helper */}
+          <div
+            ref={clickToTypeRef}
+            className="mb-2 text-sm font-normal uppercase tracking-normal text-[#1A1B1C] opacity-40"
+          >
+            {helperText}
+          </div>
 
-        {/* Main input */}
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder={placeholderText}
-          value={step === "name" ? name : location}
-          onChange={(e) => {
-            setError("");
-            if (step === "name") {
-              setName(e.target.value);
-            } else {
-              setLocation(e.target.value);
-            }
-          }}
-          onKeyDown={handleKeyDown}
-          disabled={isSubmitting}
-          className={cn(
-            "w-[800px] max-w-[90vw] border-none bg-transparent outline-none",
-            "text-center text-[32px] md:text-[64px] font-light leading-none text-[#1A1B1C]",
-            "pb-2",
-            "placeholder:text-[#A0A4AB]",
-            "cursor-text",
-            // Underline via background gradient
-            "[background-image:linear-gradient(#000,#000)]",
-            "[background-position:center_calc(100%_-_8px)]",
-            "[background-repeat:no-repeat]",
-            "[background-size:60%_0.5px]"
+          {/* Main input */}
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder={placeholderText}
+            value={step === "name" ? name : location}
+            onChange={(e) => {
+              setError("");
+              if (step === "name") {
+                setName(e.target.value);
+              } else {
+                setLocation(e.target.value);
+              }
+            }}
+            onKeyDown={handleKeyDown}
+            disabled={isSubmitting}
+            className={cn(
+              "w-[800px] max-w-[90vw] border-none bg-transparent outline-none",
+              "text-center text-[32px] md:text-[64px] font-light leading-none text-[#1A1B1C]",
+              "pb-2",
+              "placeholder:text-[#A0A4AB]",
+              "cursor-text",
+              // Underline via background gradient
+              "[background-image:linear-gradient(#000,#000)]",
+              "[background-position:center_calc(100%_-_8px)]",
+              "[background-repeat:no-repeat]",
+              "[background-size:60%_0.5px]"
+            )}
+            autoFocus
+          />
+
+          {/* Error message */}
+          {error && (
+            <p className="mt-4 text-sm text-red-500 transition-opacity duration-300">
+              {error}
+            </p>
           )}
-          autoFocus
-        />
 
-        {/* Error message */}
-        {error && (
-          <p className="mt-4 text-sm text-red-500 transition-opacity duration-300">
-            {error}
+          {/* Submit hint */}
+          {step === "location" && !error && (
+            <p className="mt-4 text-xs uppercase tracking-wide text-[#A0A4AB]">
+              Press Enter or tap Proceed to submit
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20 text-center">
+          <p className="mb-2 text-xs md:text-sm font-normal uppercase tracking-[-0.02em] text-[#A0A4AB]">
+            A.I. analysis
           </p>
-        )}
-
-        {/* Submit hint */}
-        {step === "location" && !error && (
-          <p className="mt-4 text-xs uppercase tracking-wide text-[#A0A4AB]">
-            Press Enter or tap Proceed to submit
-          </p>
-        )}
-      </div>
+          {phaseOneStatus === "processing" && (
+            <>
+              <h2 className="text-lg md:text-2xl font-semibold tracking-[-0.02em] text-[#1A1B1C] uppercase">
+                Processing information
+              </h2>
+              <p className="mt-2 text-xs md:text-sm text-[#A0A4AB] uppercase tracking-[-0.02em]">
+                Please wait a moment
+              </p>
+              <div className="mt-4 flex items-center justify-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#1A1B1C] animate-bounce [animation-delay:-0.2s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#1A1B1C] animate-bounce [animation-delay:-0.1s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#1A1B1C] animate-bounce" />
+              </div>
+            </>
+          )}
+          {phaseOneStatus === "done" && (
+            <>
+              <h2 className="text-lg md:text-2xl font-semibold tracking-[-0.02em] text-[#1A1B1C] uppercase">
+                Thank you!
+              </h2>
+              <p className="mt-2 text-xs md:text-sm text-[#A0A4AB] uppercase tracking-[-0.02em]">
+                Proceed for the next step
+              </p>
+            </>
+          )}
+        </div>
+      )}
 
       {/* ── Proceed button (bottom right, diamond style) ── */}
       <div
         ref={proceedButtonRef}
         role="button"
         tabIndex={0}
-        onClick={() => !isSubmitting && handleSubmit()}
-        onKeyDown={(e) => e.key === "Enter" && !isSubmitting && handleSubmit()}
+        onClick={() => !isSubmitting && phaseOneStatus === "done" && router.push("/next-step")}
+        onKeyDown={(e) =>
+          e.key === "Enter" && !isSubmitting && phaseOneStatus === "done" && router.push("/next-step")
+        }
         aria-label="Proceed"
         className={cn(
           "fixed bottom-8 right-8 z-[100] flex cursor-pointer items-center gap-2 group",
-          isSubmitting && "pointer-events-none opacity-50"
+          (phaseOneStatus !== "done" || isSubmitting) && "pointer-events-none opacity-0"
         )}
       >
         <span className="text-sm font-bold uppercase tracking-wide text-[#1A1B1C] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1">

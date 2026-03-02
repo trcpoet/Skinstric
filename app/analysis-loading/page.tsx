@@ -66,7 +66,6 @@ export default function AnalysisLoadingPage() {
             /* ignore */
           }
           setStatus("success");
-          router.push("/demographics");
         } else {
           throw new Error("Invalid response");
         }
@@ -113,7 +112,19 @@ export default function AnalysisLoadingPage() {
 
         <div ref={contentRef} className={styles.content}>
           {status === "loading" && (
-            <p className={styles.loadingText}>Preparing your analysis…</p>
+            <p className={styles.loadingText}>PREPARING YOUR ANALYSIS…</p>
+          )}
+          {status === "success" && (
+            <div className={styles.successBlock}>
+              <p className={styles.successTitle}>Image analyzed successfully</p>
+              <button
+                type="button"
+                className={styles.successButton}
+                onClick={() => router.push("/select")}
+              >
+                OK
+              </button>
+            </div>
           )}
           {status === "error" && (
             <div className={styles.errorBlock}>
