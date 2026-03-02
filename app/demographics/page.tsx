@@ -199,36 +199,33 @@ export default function DemographicsPage() {
         <div className="demographics-boxes">
           <div
             className={`demographics-box race-box ${activeCategory === "race" ? "active" : ""}`}
-            style={{ cursor: "pointer" }}
             onClick={() => setActiveCategory("race")}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && setActiveCategory("race")}
           >
             <div className="race-value">{toTitleCase(actual.race)}</div>
-            <div className="race-label">RACE</div>
+            <h4 className="race-label">RACE</h4>
           </div>
           <div
             className={`demographics-box age-box ${activeCategory === "age" ? "active" : ""}`}
-            style={{ cursor: "pointer" }}
             onClick={() => setActiveCategory("age")}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && setActiveCategory("age")}
           >
             <div className="age-value">{actual.age}</div>
-            <div className="age-label">AGE</div>
+            <h4 className="age-label">AGE</h4>
           </div>
           <div
             className={`demographics-box gender-box ${activeCategory === "gender" ? "active" : ""}`}
-            style={{ cursor: "pointer" }}
             onClick={() => setActiveCategory("gender")}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && setActiveCategory("gender")}
           >
             <div className="gender-value">{toTitleCase(actual.gender)}</div>
-            <div className="gender-label">SEX</div>
+            <h4 className="gender-label">SEX</h4>
           </div>
         </div>
 
@@ -266,9 +263,12 @@ export default function DemographicsPage() {
                 onClick={() => updateActual(activeCategory, label)}
                 onKeyDown={(e) => e.key === "Enter" && updateActual(activeCategory, label)}
               >
-                <span className="prediction-label">
-                  {activeCategory === "age" ? label : toTitleCase(label)}
-                </span>
+                <div className="prediction-item-left">
+                  <span className="prediction-radio" aria-hidden="true" />
+                  <span className="prediction-label">
+                    {activeCategory === "age" ? label : toTitleCase(label)}
+                  </span>
+                </div>
                 <span className="prediction-value">{toSortedPercent(score)}</span>
               </div>
             ))}
