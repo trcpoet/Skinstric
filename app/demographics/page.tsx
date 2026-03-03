@@ -251,8 +251,8 @@ export default function DemographicsPage() {
             </div>
           </div>
 
-          {/* Mobile-only instruction text inside large box */}
-          <p className="instruction-text instruction-text-mobile">
+          {/* Instruction text directly under the large demographics box on desktop */}
+          <p className="instruction-text instruction-text-desktop">
             If A.I estimate is wrong, select the correct one.
           </p>
         </div>
@@ -283,10 +283,11 @@ export default function DemographicsPage() {
             ))}
           </div>
         </div>
-      </div>
 
-      <div className="instruction-text instruction-text-desktop">
-        If A.I estimate is wrong, select the correct one.
+        {/* Instruction text under the bottom large demographics box on mobile */}
+        <p className="instruction-text instruction-text-mobile">
+          If A.I estimate is wrong, select the correct one.
+        </p>
       </div>
 
       <div className="action-buttons">

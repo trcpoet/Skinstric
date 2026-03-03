@@ -102,6 +102,7 @@
   color: #1a1b1c;
   font-family: "Roobert TRIAL", sans-serif;
   font-weight: 400;
+  margin-bottom: auto;
   letter-spacing: -0.02em;
   text-transform: uppercase;
 }
@@ -129,11 +130,14 @@
   font-size: 16px;
   line-height: 24px;
   margin-top: 8px;
+  margin-bottom: auto;
 }
 
 @media (max-width: 480px) {
   .predicted-text {
     font-size: 12px;
+    margin-bottom: auto;
+    margin-top: auto;
   }
 }
 
@@ -328,6 +332,21 @@
   min-width: 0;
 }
 
+@media (max-width: 1200px) {
+  .large-demographics-box {
+    height: 440px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .large-demographics-box {
+    height: auto;
+    min-height: 320px;
+    padding: 16px;
+  }
+}
+
 .selected-race-display {
   color: #1a1b1c;
   font-family: "Roobert TRIAL", sans-serif;
@@ -351,6 +370,22 @@
   margin-bottom: 16px;
   text-align: left;
   text-transform: none;
+}
+
+@media (max-width: 1200px) {
+  .selected-race-display,
+  .selected-age-display,
+  .selected-gender-display {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .selected-race-display,
+  .selected-age-display,
+  .selected-gender-display {
+    font-size: 18px;
+  }
 }
 
 .circular-graph {
@@ -436,6 +471,13 @@
   .right-demographics-box {
     width: 100%;
     height: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .right-demographics-box {
+    padding: 16px;
   }
 }
 
@@ -457,6 +499,12 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .box-title {
+    font-size: 12px;
+  }
 }
 
 .predictions-list {
@@ -551,6 +599,22 @@
   line-height: 24px;
 }
 
+@media (max-width: 1200px) {
+  .prediction-label,
+  .prediction-value {
+    font-size: 14px;
+    line-height: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  .prediction-label,
+  .prediction-value {
+    font-size: 13px;
+    line-height: 20px;
+  }
+}
+
 .prediction-value {
   font-weight: 400;
 }
@@ -562,20 +626,22 @@
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 18px;
+  text-align: center;
+  margin: 24px auto 0;
+  width: 100%;
 }
 
 .instruction-text-desktop {
+  display: block;
   position: absolute;
-  left: 50%;
-  top: 790px;
-  transform: translateX(-50%);
-  text-align: center;
-  white-space: nowrap;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  margin: 0;
 }
 
 .instruction-text-mobile {
   display: none;
-  text-align: center;
 }
 
 @media (max-width: 1200px) {
@@ -585,8 +651,7 @@
 
   .instruction-text-mobile {
     display: block;
-    margin: 24px auto 0;
-    width: 100%;
+    margin-top: 16px;
   }
 }
 
