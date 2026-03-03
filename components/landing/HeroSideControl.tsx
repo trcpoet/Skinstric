@@ -27,7 +27,7 @@ const HeroSideControl = forwardRef<HTMLDivElement, HeroSideControlProps>(
         )}
       >
         <button
-          className="relative flex items-center justify-center outline-none transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[0.8]"
+          className="relative flex items-center justify-center outline-none cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[0.8]"
           aria-label={label}
         >
           {side === "left" ? (
