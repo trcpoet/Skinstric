@@ -321,24 +321,36 @@ export default function DemographicsPage() {
             </button>
           </div>
 
-          {/* Mobile sticky nav (Back / Home) – diamond buttons, under 1200px */}
+          {/* Mobile sticky nav (Back / Home) – diamond + arrow + label, under 1200px */}
           <div className="demographics-mobile-nav">
             <div className="demographics-mobile-nav-inner">
               <button
                 type="button"
-                className="demographics-mobile-nav-diamond demographics-mobile-nav-back"
+                className="demographics-mobile-nav-btn demographics-mobile-nav-back"
                 onClick={() => router.push("/select")}
                 aria-label="Back"
               >
-                <span className="demographics-mobile-nav-diamond-text">BACK</span>
+                <span className="demographics-mobile-nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z" stroke="#1A1B1C" strokeWidth="1.5" />
+                    <path d="M15.714 22L25.143 27.444V16.556L15.714 22Z" fill="#1A1B1C" transform="rotate(180 22 22)" />
+                  </svg>
+                </span>
+                <span className="demographics-mobile-nav-label">BACK</span>
               </button>
               <button
                 type="button"
-                className="demographics-mobile-nav-diamond demographics-mobile-nav-home"
+                className="demographics-mobile-nav-btn demographics-mobile-nav-home"
                 onClick={() => router.push("/")}
                 aria-label="Home"
               >
-                <span className="demographics-mobile-nav-diamond-text">HOME</span>
+                <span className="demographics-mobile-nav-label">HOME</span>
+                <span className="demographics-mobile-nav-icon" aria-hidden="true">
+                  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z" stroke="#1A1B1C" strokeWidth="1.5" />
+                    <path d="M15.714 22L25.143 27.444V16.556L15.714 22Z" fill="#1A1B1C" />
+                  </svg>
+                </span>
               </button>
             </div>
           </div>

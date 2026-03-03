@@ -710,34 +710,57 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 32px;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 24px;
   }
 
-  .demographics-mobile-nav-diamond {
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
+  .demographics-mobile-nav-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .demographics-mobile-nav-btn:hover {
+    transform: scale(0.96);
+  }
+
+  .demographics-mobile-nav-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #1a1b1c;
-    background: transparent;
-    cursor: pointer;
-    transform: rotate(45deg);
-    transition: transform 0.2s ease;
-    padding: 0;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
   }
 
-  .demographics-mobile-nav-diamond:hover {
-    transform: rotate(45deg) scale(0.92);
+  .demographics-mobile-nav-icon svg {
+    width: 100%;
+    height: 100%;
+    transform: scale(0.85);
   }
 
-  .demographics-mobile-nav-diamond-text {
-    transform: rotate(-45deg);
+  /* Rotate both mobile nav arrows 180deg */
+  .demographics-mobile-nav-back .demographics-mobile-nav-icon svg,
+  .demographics-mobile-nav-home .demographics-mobile-nav-icon svg {
+    transform: scale(0.85) rotate(180deg);
+  }
+
+  .demographics-mobile-nav-btn:hover .demographics-mobile-nav-icon svg {
+    transform: scale(0.92) rotate(180deg);
+  }
+
+  .demographics-mobile-nav-label {
     font-family: "Roobert TRIAL", sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: -0.02em;
     text-transform: uppercase;
