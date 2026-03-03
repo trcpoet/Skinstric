@@ -696,7 +696,7 @@
 @media (max-width: 1200px) {
   .demographics-mobile-nav {
     position: fixed;
-    bottom: 0;
+    bottom: 32px;
     left: 0;
     right: 0;
     display: block;
