@@ -168,6 +168,7 @@
     width: 100vw;
     max-width: 100vw;
     padding: 0 16px;
+    padding-bottom: 100px; /* space so fixed nav doesn’t cover prediction list */
     transform: translateX(-50%);
     margin-top: 220px; /* space below DEMOGRAPHICS header */
   }
@@ -694,29 +695,54 @@
 
 @media (max-width: 1200px) {
   .demographics-mobile-nav {
-    position: sticky;
-    bottom: 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    padding: 16px 16px 24px;
+    background-color: #ffffff;
+    z-index: 120;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .demographics-mobile-nav-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 480px;
-    margin: 24px auto 16px;
+    max-width: 100%;
+    margin: 0 auto;
     padding: 0 16px;
-    z-index: 120;
   }
 
-  .demographics-mobile-nav-button {
-    min-width: 96px;
-    padding: 10px 16px;
+  .demographics-mobile-nav-diamond {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid #1a1b1c;
-    background-color: #ffffff;
-    color: #1a1b1c;
+    background: transparent;
+    cursor: pointer;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+    padding: 0;
+  }
+
+  .demographics-mobile-nav-diamond:hover {
+    transform: rotate(45deg) scale(0.92);
+  }
+
+  .demographics-mobile-nav-diamond-text {
+    transform: rotate(-45deg);
     font-family: "Roobert TRIAL", sans-serif;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    cursor: pointer;
+    color: #1a1b1c;
+    line-height: 1;
   }
 }
 

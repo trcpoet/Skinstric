@@ -321,22 +321,26 @@ export default function DemographicsPage() {
             </button>
           </div>
 
-          {/* Mobile floating nav (Back / Home) */}
+          {/* Mobile sticky nav (Back / Home) – diamond buttons, under 1200px */}
           <div className="demographics-mobile-nav">
-            <button
-              type="button"
-              className="demographics-mobile-nav-button demographics-mobile-nav-back"
-              onClick={() => router.push("/select")}
-            >
-              Back
-            </button>
-            <button
-              type="button"
-              className="demographics-mobile-nav-button demographics-mobile-nav-home"
-              onClick={() => router.push("/")}
-            >
-              Home
-            </button>
+            <div className="demographics-mobile-nav-inner">
+              <button
+                type="button"
+                className="demographics-mobile-nav-diamond demographics-mobile-nav-back"
+                onClick={() => router.push("/select")}
+                aria-label="Back"
+              >
+                <span className="demographics-mobile-nav-diamond-text">BACK</span>
+              </button>
+              <button
+                type="button"
+                className="demographics-mobile-nav-diamond demographics-mobile-nav-home"
+                onClick={() => router.push("/")}
+                aria-label="Home"
+              >
+                <span className="demographics-mobile-nav-diamond-text">HOME</span>
+              </button>
+            </div>
           </div>
 
           <div
