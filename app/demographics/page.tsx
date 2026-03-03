@@ -250,6 +250,11 @@ export default function DemographicsPage() {
               </div>
             </div>
           </div>
+
+          {/* Mobile-only instruction text inside large box */}
+          <p className="instruction-text instruction-text-mobile">
+            If A.I estimate is wrong, select the correct one.
+          </p>
         </div>
 
         <div className="right-demographics-box">
@@ -280,7 +285,9 @@ export default function DemographicsPage() {
         </div>
       </div>
 
-      <div className="instruction-text">If A.I estimate is wrong, select the correct one.</div>
+      <div className="instruction-text instruction-text-desktop">
+        If A.I estimate is wrong, select the correct one.
+      </div>
 
       <div className="action-buttons">
         <button type="button" className="reset-button" onClick={handleReset}>
@@ -288,6 +295,24 @@ export default function DemographicsPage() {
         </button>
         <button type="button" className="confirm-button" onClick={handleConfirm}>
           CONFIRM
+        </button>
+      </div>
+
+      {/* Mobile floating nav (Back / Home) */}
+      <div className="demographics-mobile-nav">
+        <button
+          type="button"
+          className="demographics-mobile-nav-button demographics-mobile-nav-back"
+          onClick={() => router.push("/select")}
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          className="demographics-mobile-nav-button demographics-mobile-nav-home"
+          onClick={() => router.push("/")}
+        >
+          Home
         </button>
       </div>
 
