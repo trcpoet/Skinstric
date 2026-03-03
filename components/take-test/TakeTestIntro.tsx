@@ -50,7 +50,6 @@ export default function TakeTestIntro() {
           enterCodeRef.current,
           clickToTypeRef.current,
           inputRef.current,
-          proceedButtonRef.current,
           backButtonRef.current,
           diamondOuterRef.current,
           diamondMiddleRef.current,
@@ -63,7 +62,6 @@ export default function TakeTestIntro() {
       gsap.set(analysisTextRef.current, { y: 20 });
       gsap.set(clickToTypeRef.current, { y: 15 });
       gsap.set(inputRef.current, { y: 25 });
-      gsap.set(proceedButtonRef.current, { y: 10 });
       gsap.set(backButtonRef.current, { x: -20 });
 
       tl.to(headerRef.current, { autoAlpha: 1, y: 0, duration: 0.6 })
@@ -91,11 +89,6 @@ export default function TakeTestIntro() {
           inputRef.current,
           { autoAlpha: 1, y: 0, duration: 0.7 },
           "-=0.3"
-        )
-        .to(
-          proceedButtonRef.current,
-          { autoAlpha: 1, y: 0, duration: 0.5 },
-          "-=0.2"
         )
         .to(
           backButtonRef.current,
@@ -367,62 +360,49 @@ export default function TakeTestIntro() {
         </div>
       )}
 
-      {/* ── Proceed button (bottom right, diamond style) ── */}
-      <div
-        ref={proceedButtonRef}
-        role="button"
-        tabIndex={0}
-        onClick={() => {
-          if (isSubmitting) return;
-          if (phaseOneStatus === "done") {
-            router.push("/next-step");
-          } else {
-            handleSubmit();
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key !== "Enter") return;
-          if (isSubmitting) return;
-          if (phaseOneStatus === "done") {
-            router.push("/next-step");
-          } else {
-            handleSubmit();
-          }
-        }}
-        aria-label="Proceed"
-        className={cn(
-          "fixed bottom-8 right-8 z-[100] flex cursor-pointer items-center gap-2 group",
-          phaseOneStatus === "processing" && "pointer-events-none opacity-50"
-        )}
-      >
-        <span className="text-sm font-bold uppercase tracking-wide text-[#1A1B1C] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1">
-          Proceed
-        </span>
-        <button
-          type="button"
-          className="relative flex items-center justify-center outline-none transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[0.8]"
-          aria-hidden
+      {/* ── Proceed button: only visible after first API hit completes ── */}
+      {phaseOneStatus === "done" && (
+        <div
+          ref={proceedButtonRef}
+          role="button"
+          tabIndex={0}
+          onClick={() => router.push("/next-step")}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") router.push("/next-step");
+          }}
+          aria-label="Proceed"
+          className="fixed bottom-8 right-8 z-[100] flex cursor-pointer items-center gap-2 group opacity-0"
+          style={{ animation: "takeTestProceedFadeIn 0.5s ease forwards" }}
         >
-          <svg
-            width="44"
-            height="44"
-            viewBox="0 0 44 44"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+          <span className="text-sm font-bold uppercase tracking-wide text-[#1A1B1C] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-x-1">
+            Proceed
+          </span>
+          <button
+            type="button"
+            className="relative flex items-center justify-center outline-none transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[0.8]"
+            aria-hidden
           >
-            <path
-              d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z"
-              stroke="#1A1B1C"
-              className="transition-colors duration-500 ease-out group-hover:fill-[#1A1B1C]"
-            />
-            <path
-              d="M28.1426 22L18.714 27.4436V16.5564L28.1426 22Z"
-              fill="#1A1B1C"
-              className="transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:fill-white group-hover:translate-x-1"
-            />
-          </svg>
-        </button>
-      </div>
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 44 44"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z"
+                stroke="#1A1B1C"
+                className="transition-colors duration-500 ease-out group-hover:fill-[#1A1B1C]"
+              />
+              <path
+                d="M28.1426 22L18.714 27.4436V16.5564L28.1426 22Z"
+                fill="#1A1B1C"
+                className="transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:fill-white group-hover:translate-x-1"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/* ── Back button ── */}
       <div

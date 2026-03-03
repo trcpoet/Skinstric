@@ -11,6 +11,16 @@
   visibility: hidden;
 }
 
+/* ── Take-test: Proceed button fade-in after API complete ── */
+@keyframes takeTestProceedFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* ── Take-test page: rotating diamonds ── */
 @keyframes rotate-diamond {
   from {
