@@ -650,8 +650,28 @@
   margin: 24px auto 0;
 }
 
-.demographics-boxes-container > .instruction-text {
+.instruction-text-desktop {
+  display: inline-block;
+}
+
+.instruction-text-mobile {
+  display: none;
+}
+
+.demographics-boxes-container > .instruction-text-desktop {
   grid-column: 1 / -1;
+}
+
+@media (max-width: 1200px) {
+  .instruction-text-desktop {
+    display: none;
+  }
+
+  .instruction-text-mobile {
+    display: inline-block;
+    width: 100%;
+    margin-top: 24px;
+  }
 }
 
 .action-buttons {

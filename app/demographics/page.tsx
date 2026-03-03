@@ -272,6 +272,11 @@ export default function DemographicsPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Mobile: instruction text inside the large box, under the graph */}
+              <p className="instruction-text instruction-text-mobile">
+                If A.I estimate is wrong, select the correct one.
+              </p>
             </div>
 
             <div className="right-demographics-box">
@@ -301,8 +306,8 @@ export default function DemographicsPage() {
               </div>
             </div>
 
-            {/* Instruction text under the large demographics box, spanning full width */}
-            <p className="instruction-text">
+            {/* Desktop: full-width instruction text under the demographics boxes */}
+            <p className="instruction-text instruction-text-desktop">
               If A.I estimate is wrong, select the correct one.
             </p>
           </div>
