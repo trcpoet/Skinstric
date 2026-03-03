@@ -405,7 +405,7 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  background: conic-gradient(#1a1b1c 0deg, #e0e0e0 0deg);
+  background: conic-gradient(#1a1b1c var(--progress-angle, 0deg), #e0e0e0 0deg);
 }
 
 @media (max-width: 1200px) {
@@ -736,6 +736,9 @@
   cursor: pointer;
   left: 32px;
   position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   transition: transform 0.3s ease;
   z-index: 100;
 }

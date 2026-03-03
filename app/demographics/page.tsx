@@ -41,6 +41,7 @@ export default function DemographicsPage() {
   const [predictions, setPredictions] = useState<PhaseTwoData | null>(null);
   const [actual, setActual] = useState<ActualDemographics | null>(null);
   const [activeCategory, setActiveCategory] = useState<ActiveCategory>("race");
+  const circleProgressRef = useRef<HTMLDivElement>(null);
 
   const loadFromStorage = useCallback(() => {
     try {
@@ -121,24 +122,15 @@ export default function DemographicsPage() {
     router.push("/");
   }, [router]);
 
-  if (!predictions || !actual) {
-    return (
-      <div className="demographics-page">
-        <p className="demographics-no-data">No analysis data. Please start from the beginning.</p>
-        <button
-          type="button"
-          className="demographics-back-btn"
-          onClick={() => router.push("/next-step")}
-        >
-          Back
-        </button>
-      </div>
-    );
-  }
+  let raceList: [string, number][] = [];
+  let ageList: [string, number][] = [];
+  let genderList: [string, number][] = [];
 
-  const raceList = objToSortedList(predictions.race);
-  const ageList = objToSortedList(predictions.age);
-  const genderList = objToSortedList(predictions.gender);
+  if (predictions) {
+    raceList = objToSortedList(predictions.race);
+    ageList = objToSortedList(predictions.age);
+    genderList = objToSortedList(predictions.gender);
+  }
 
   const getListForCategory = (cat: ActiveCategory) => {
     if (cat === "race") return raceList;
@@ -147,6 +139,7 @@ export default function DemographicsPage() {
   };
 
   const getValueForCategory = (cat: ActiveCategory) => {
+    if (!actual) return "";
     if (cat === "race") return actual.race;
     if (cat === "age") return actual.age;
     return actual.gender;
@@ -166,13 +159,29 @@ export default function DemographicsPage() {
     return entry ? entry[1] : 0;
   };
 
-  const percent = getPercentForCategory(activeCategory);
-  const conicDegrees = (percent * 100).toFixed(2);
-  const conicStyle = {
-    background: `conic-gradient(rgb(26, 27, 28) ${parseFloat(conicDegrees) * 3.6}deg, rgb(224, 224, 224) 0deg)`,
-  };
+  const hasData = !!(predictions && actual);
 
-  const predictionsList = getListForCategory(activeCategory);
+  const percent = hasData ? getPercentForCategory(activeCategory) : 0;
+  const progressAngle = percent * 360;
+
+  useLayoutEffect(() => {
+    if (!circleProgressRef.current) return;
+
+    const angle = `${progressAngle}deg`;
+
+    if (prefersReducedMotion) {
+      gsap.set(circleProgressRef.current, { "--progress-angle": angle });
+      return;
+    }
+
+    gsap.to(circleProgressRef.current, {
+      "--progress-angle": angle,
+      duration: 0.6,
+      ease: "power2.out",
+    });
+  }, [progressAngle, prefersReducedMotion]);
+
+  const predictionsList = hasData ? getListForCategory(activeCategory) : [];
   const categoryHeader = activeCategory === "race" ? "RACE" : activeCategory === "age" ? "AGE" : "GENDER";
 
   const isSelected = (label: string) => {
@@ -182,167 +191,181 @@ export default function DemographicsPage() {
 
   return (
     <div className="demographics-page">
-      <div className="top-left-text">
-        <a className="skinstric-link" href="/" data-discover="true">
-          <span className="skinstric-text">SKINSTRIC</span>
-        </a>
-        <span className="intro-text">[ Analysis ]</span>
-      </div>
-
-      <button type="button" className="enter-code-btn" aria-label="Enter code">
-        Enter Code
-      </button>
-
-      <div className="demographics-content">
-        <div className="ai-analysis-title">A.I. ANALYSIS</div>
-        <div className="demographics-subtitle">DEMOGRAPHICS</div>
-        <div className="predicted-text">PREDICTED RACE &amp; AGE</div>
-      </div>
-
-      <div className="demographics-boxes-container">
-        <div className="demographics-boxes">
-          <div
-            className={`demographics-box race-box ${activeCategory === "race" ? "active" : ""}`}
-            onClick={() => setActiveCategory("race")}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && setActiveCategory("race")}
+      {!hasData ? (
+        <>
+          <p className="demographics-no-data">No analysis data. Please start from the beginning.</p>
+          <button
+            type="button"
+            className="demographics-back-btn"
+            onClick={() => router.push("/next-step")}
           >
-            <div className="race-value">{toTitleCase(actual.race)}</div>
-            <h4 className="race-label">RACE</h4>
-          </div>
-          <div
-            className={`demographics-box age-box ${activeCategory === "age" ? "active" : ""}`}
-            onClick={() => setActiveCategory("age")}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && setActiveCategory("age")}
-          >
-            <div className="age-value">{actual.age}</div>
-            <h4 className="age-label">AGE</h4>
-          </div>
-          <div
-            className={`demographics-box gender-box ${activeCategory === "gender" ? "active" : ""}`}
-            onClick={() => setActiveCategory("gender")}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && setActiveCategory("gender")}
-          >
-            <div className="gender-value">{toTitleCase(actual.gender)}</div>
-            <h4 className="gender-label">SEX</h4>
-          </div>
-        </div>
-
-        <div className="large-demographics-box">
-          {activeCategory === "race" && (
-            <div className="selected-race-display">{getDisplayValue("race")}</div>
-          )}
-          {activeCategory === "age" && (
-            <div className="selected-age-display">{getDisplayValue("age")}</div>
-          )}
-          {activeCategory === "gender" && (
-            <div className="selected-gender-display">{getDisplayValue("gender")}</div>
-          )}
-          <div className="circular-graph">
-            <div className="circle-progress" style={conicStyle}>
-              <div className="circle-inner">
-                <span className="percentage-text">{toSortedPercent(percent)}</span>
-              </div>
-            </div>
+            Back
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="top-left-text">
+            <a className="skinstric-link" href="/" data-discover="true">
+              <span className="skinstric-text">SKINSTRIC</span>
+            </a>
+            <span className="intro-text">[ Analysis ]</span>
           </div>
 
-          {/* Instruction text directly under the large demographics box on desktop */}
-          <p className="instruction-text instruction-text-desktop">
-            If A.I estimate is wrong, select the correct one.
-          </p>
-        </div>
+          <button type="button" className="enter-code-btn" aria-label="Enter code">
+            Enter Code
+          </button>
 
-        <div className="right-demographics-box">
-          <div className="box-header">
-            <div className="box-title">{categoryHeader}</div>
-            <div className="box-title">A.I. CONFIDENCE</div>
+          <div className="demographics-content">
+            <div className="ai-analysis-title">A.I. ANALYSIS</div>
+            <div className="demographics-subtitle">DEMOGRAPHICS</div>
+            <div className="predicted-text">PREDICTED RACE &amp; AGE</div>
           </div>
-          <div className="predictions-list">
-            {predictionsList.map(([label, score]) => (
+
+          <div className="demographics-boxes-container">
+            <div className="demographics-boxes">
               <div
-                key={label}
-                className={`prediction-item ${isSelected(label) ? "selected" : ""}`}
+                className={`demographics-box race-box ${activeCategory === "race" ? "active" : ""}`}
+                onClick={() => setActiveCategory("race")}
                 role="button"
                 tabIndex={0}
-                onClick={() => updateActual(activeCategory, label)}
-                onKeyDown={(e) => e.key === "Enter" && updateActual(activeCategory, label)}
+                onKeyDown={(e) => e.key === "Enter" && setActiveCategory("race")}
               >
-                <div className="prediction-item-left">
-                  <span className="prediction-radio" aria-hidden="true" />
-                  <span className="prediction-label">
-                    {activeCategory === "age" ? label : toTitleCase(label)}
-                  </span>
-                </div>
-                <span className="prediction-value">{toSortedPercent(score)}</span>
+                <div className="race-value">{toTitleCase(actual!.race)}</div>
+                <h4 className="race-label">RACE</h4>
               </div>
-            ))}
+              <div
+                className={`demographics-box age-box ${activeCategory === "age" ? "active" : ""}`}
+                onClick={() => setActiveCategory("age")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setActiveCategory("age")}
+              >
+                <div className="age-value">{actual!.age}</div>
+                <h4 className="age-label">AGE</h4>
+              </div>
+              <div
+                className={`demographics-box gender-box ${activeCategory === "gender" ? "active" : ""}`}
+                onClick={() => setActiveCategory("gender")}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setActiveCategory("gender")}
+              >
+                <div className="gender-value">{toTitleCase(actual!.gender)}</div>
+                <h4 className="gender-label">SEX</h4>
+              </div>
+            </div>
+
+            <div className="large-demographics-box">
+              {activeCategory === "race" && (
+                <div className="selected-race-display">{getDisplayValue("race")}</div>
+              )}
+              {activeCategory === "age" && (
+                <div className="selected-age-display">{getDisplayValue("age")}</div>
+              )}
+              {activeCategory === "gender" && (
+                <div className="selected-gender-display">{getDisplayValue("gender")}</div>
+              )}
+              <div className="circular-graph">
+                <div className="circle-progress" ref={circleProgressRef}>
+                  <div className="circle-inner">
+                    <span className="percentage-text">{toSortedPercent(percent)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instruction text directly under the large demographics box on desktop */}
+              <p className="instruction-text instruction-text-desktop">
+                If A.I estimate is wrong, select the correct one.
+              </p>
+            </div>
+
+            <div className="right-demographics-box">
+              <div className="box-header">
+                <div className="box-title">{categoryHeader}</div>
+                <div className="box-title">A.I. CONFIDENCE</div>
+              </div>
+              <div className="predictions-list">
+                {predictionsList.map(([label, score]) => (
+                  <div
+                    key={label}
+                    className={`prediction-item ${isSelected(label) ? "selected" : ""}`}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => updateActual(activeCategory, label)}
+                    onKeyDown={(e) => e.key === "Enter" && updateActual(activeCategory, label)}
+                  >
+                    <div className="prediction-item-left">
+                      <span className="prediction-radio" aria-hidden="true" />
+                      <span className="prediction-label">
+                        {activeCategory === "age" ? label : toTitleCase(label)}
+                      </span>
+                    </div>
+                    <span className="prediction-value">{toSortedPercent(score)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Instruction text under the bottom large demographics box on mobile */}
+            <p className="instruction-text instruction-text-mobile">
+              If A.I estimate is wrong, select the correct one.
+            </p>
           </div>
-        </div>
 
-        {/* Instruction text under the bottom large demographics box on mobile */}
-        <p className="instruction-text instruction-text-mobile">
-          If A.I estimate is wrong, select the correct one.
-        </p>
-      </div>
+          <div className="action-buttons">
+            <button type="button" className="reset-button" onClick={handleReset}>
+              RESET
+            </button>
+            <button type="button" className="confirm-button" onClick={handleConfirm}>
+              CONFIRM
+            </button>
+          </div>
 
-      <div className="action-buttons">
-        <button type="button" className="reset-button" onClick={handleReset}>
-          RESET
-        </button>
-        <button type="button" className="confirm-button" onClick={handleConfirm}>
-          CONFIRM
-        </button>
-      </div>
+          {/* Mobile floating nav (Back / Home) */}
+          <div className="demographics-mobile-nav">
+            <button
+              type="button"
+              className="demographics-mobile-nav-button demographics-mobile-nav-back"
+              onClick={() => router.push("/select")}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              className="demographics-mobile-nav-button demographics-mobile-nav-home"
+              onClick={() => router.push("/")}
+            >
+              Home
+            </button>
+          </div>
 
-      {/* Mobile floating nav (Back / Home) */}
-      <div className="demographics-mobile-nav">
-        <button
-          type="button"
-          className="demographics-mobile-nav-button demographics-mobile-nav-back"
-          onClick={() => router.push("/select")}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className="demographics-mobile-nav-button demographics-mobile-nav-home"
-          onClick={() => router.push("/")}
-        >
-          Home
-        </button>
-      </div>
-
-      <div
-        className="back-button-icon"
-        role="button"
-        tabIndex={0}
-        onClick={() => router.push("/next-step")}
-        onKeyDown={(e) => e.key === "Enter" && router.push("/next-step")}
-        aria-label="Back"
-        style={{ display: "flex", alignItems: "center", gap: "12px" }}
-      >
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z" stroke="#1A1B1C" />
-          <path d="M15.7144 22L25.1429 27.4436V16.5564L15.7144 22Z" fill="#1A1B1C" />
-        </svg>
-        <span
-          style={{
-            fontFamily: '"Roobert TRIAL", sans-serif',
-            fontSize: "14px",
-            fontWeight: 700,
-            letterSpacing: "-0.02em",
-            textTransform: "uppercase",
-            color: "#1a1b1c",
-          }}
-        >
-          BACK
-        </span>
-      </div>
+          <div
+            className="back-button-icon"
+            role="button"
+            tabIndex={0}
+            onClick={() => router.push("/next-step")}
+            onKeyDown={(e) => e.key === "Enter" && router.push("/next-step")}
+            aria-label="Back"
+          >
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M43.293 22L22 43.293L0.707031 22L22 0.707031L43.293 22Z" stroke="#1A1B1C" />
+              <path d="M15.7144 22L25.1429 27.4436V16.5564L15.7144 22Z" fill="#1A1B1C" />
+            </svg>
+            <span
+              style={{
+                fontFamily: '"Roobert TRIAL", sans-serif',
+                fontSize: "14px",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                textTransform: "uppercase",
+                color: "#1a1b1c",
+              }}
+            >
+              BACK
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
